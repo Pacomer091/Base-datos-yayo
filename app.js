@@ -1,8 +1,6 @@
 // --- Configuración y Estado ---
 let userPin = "";
-const CORRECT_PIN = "5456"; // Actualizado según pedido
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQSuiQXnxVXLyNSAOLc6Bf9-BDrswU9TSFX3aEcOF78WwEtQhkecskYlgZAFefcCN3/exec'; 
-
+const CORRECT_PIN = "5456";
 let passwords = [];
 
 // --- Elementos de la Interfaz ---
@@ -17,7 +15,6 @@ function addPin(digit) {
     if (userPin.length < 4) {
         userPin += digit;
         updatePinDots();
-        
         if (userPin.length === 4) {
             setTimeout(validatePin, 200);
         }
@@ -43,16 +40,16 @@ async function validatePin() {
     if (userPin === CORRECT_PIN) {
         showList();
     } else {
-        alert("Ese código no es correcto, Miguel. Prueba otra vez.");
+        alert("Incorrecto, Miguel. Prueba otra vez.");
         clearPin();
     }
 }
 
 // --- Navegación ---
-async function showList() {
+function showList() {
     hideAllScreens();
     screenList.style.display = 'block';
-    await fetchPasswords();
+    loadFromLocal();
 }
 
 function showAddForm() {
@@ -68,121 +65,132 @@ function hideAllScreens() {
 
 // --- Lógica de Seguridad (Encriptación) ---
 function encrypt(text) {
-    return CryptoJS.AES.encrypt(text, userPin).toString();
+    return CryptoJS.AES.encrypt(text, CORRECT_PIN).toString(); // Usamos el PIN fijo para que sea recuperable
 }
 
 function decrypt(cipher) {
     try {
-        const bytes = CryptoJS.AES.decrypt(cipher, userPin);
+        const bytes = CryptoJS.AES.decrypt(cipher, CORRECT_PIN);
         return bytes.toString(CryptoJS.enc.Utf8);
     } catch (e) {
         return "Error al leer";
     }
 }
 
-// --- Gestión de Contraseñas (Google Sheets) ---
-async function fetchPasswords() {
-    listContainer.innerHTML = '<p style="text-align: center; margin-top: 2rem;">Buscando tus claves...</p>';
-    try {
-        console.log("Conectando con Google Sheets...");
-        // Usamos cache: 'no-store' y explicitamente manejamos la respuesta como texto para evitar fallos de CORS con JSON pre-visto
-        const response = await fetch(SCRIPT_URL + "?action=get", {
-            method: 'GET',
-            cache: 'no-store',
-            redirect: 'follow'
-        });
-        
-        if (!response.ok) throw new Error("Google no responde bien. Status: " + response.status);
-        
-        const rawText = await response.text();
-        console.log("Respuesta recibida:", rawText);
-        
-        const data = JSON.parse(rawText);
-        
-        if (data.error) {
-            throw new Error("Google dice: " + data.error);
-        }
-
-        if (!Array.isArray(data)) {
-            throw new Error("Recibido formato incorrecto de Google");
-        }
-        
-        passwords = data.map(item => ({
-            site: item.site || "Sin nombre",
-            user: item.user || "Sin usuario",
+// --- Gestión Local (APK Friendly) ---
+function loadFromLocal() {
+    const raw = localStorage.getItem('miguel_vault');
+    if (raw) {
+        const encryptedData = JSON.parse(raw);
+        passwords = encryptedData.map(item => ({
+            site: item.site,
+            user: item.user,
             pass: decrypt(item.pass)
         }));
-        
-        renderPasswords();
-    } catch (e) {
-        console.error("Error detallado:", e);
-        listContainer.innerHTML = `<p style="text-align: center; color: #f87171; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 1rem;">
-            No se pudo conectar con la base de datos.<br><br>
-            <span style="font-size: 0.9rem; opacity: 0.8;">Motivo: ${e.message}</span><br>
-            <span style="font-size: 0.8rem; opacity: 0.5;">Asegúrate de haber publicado el script como "Cualquiera" y "Nueva versión".</span>
-        </p>`;
+    } else {
+        passwords = [];
     }
+    renderPasswords();
+}
+
+function saveToLocal() {
+    const encryptedData = passwords.map(item => ({
+        site: item.site,
+        user: item.user,
+        pass: encrypt(item.pass)
+    }));
+    localStorage.setItem('miguel_vault', JSON.stringify(encryptedData));
 }
 
 function renderPasswords() {
     if (passwords.length === 0) {
-        listContainer.innerHTML = '<p style="text-align: center; margin-top: 2rem;">No tienes ninguna guardada todavía.</p>';
+        listContainer.innerHTML = '<p style="text-align: center; margin-top: 2rem; opacity: 0.6;">No tienes claves guardadas aún.</p>';
         return;
     }
 
-    listContainer.innerHTML = passwords.map(pass => `
+    listContainer.innerHTML = passwords.map((pass, index) => `
         <div class="card">
             <div class="card-title">${pass.site}</div>
             <p><strong>Usuario:</strong> ${pass.user}</p>
             <p style="margin-bottom: 1rem;"><strong>Clave:</strong> ${pass.pass}</p>
-            <button class="btn btn-outline" onclick="copyToClipboard('${pass.pass}')">COPIAR CLAVE</button>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-outline" style="flex: 2;" onclick="copyToClipboard('${pass.pass}')">COPIAR</button>
+                <button class="btn btn-outline" style="flex: 1; border-color: #ef4444; color: #ef4444;" onclick="deletePassword(${index})">ELIMINAR</button>
+            </div>
         </div>
     `).join('');
 }
 
-async function savePassword() {
+function deletePassword(index) {
+    if (confirm("¿Seguro que quieres borrar esta clave?")) {
+        passwords.splice(index, 1);
+        saveToLocal();
+        renderPasswords();
+    }
+}
+
+function savePassword() {
     const site = document.getElementById('in-site').value;
     const user = document.getElementById('in-user').value;
     const pass = document.getElementById('in-pass').value;
 
     if (!site || !pass) {
-        alert("Falta el nombre de la web o la contraseña.");
+        alert("Necesitas poner el nombre y la clave.");
         return;
     }
 
-    const btn = document.querySelector('#screen-add .btn-primary');
-    btn.innerText = "GUARDANDO...";
-    btn.disabled = true;
-
-    try {
-        // Encriptar la contraseña ANTES de enviarla a Google Sheets
-        const encryptedPass = encrypt(pass);
-
-        await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            cache: 'no-cache',
-            body: JSON.stringify({ action: 'add', site, user, pass: encryptedPass })
-        });
-        
-        alert("¡Guardado correctamente, Miguel!");
-        showList();
-    } catch (e) {
-        alert("No se pudo guardar. Revisa la conexión.");
-    } finally {
-        btn.innerText = "GUARDAR";
-        btn.disabled = false;
-        // Limpiar campos
-        document.getElementById('in-site').value = "";
-        document.getElementById('in-user').value = "";
-        document.getElementById('in-pass').value = "";
-    }
+    passwords.push({ site, user, pass });
+    saveToLocal();
+    
+    alert("¡Guardado correctamente!");
+    showList();
+    
+    // Limpiar
+    document.getElementById('in-site').value = "";
+    document.getElementById('in-user').value = "";
+    document.getElementById('in-pass').value = "";
 }
 
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
-        alert("¡Copiado! Ya puedes pegarlo.");
+        alert("¡Copiado!");
     });
+}
+
+// --- Funciones de Archivo (Copia de Seguridad) ---
+function exportToFile() {
+    const data = localStorage.getItem('miguel_vault');
+    if (!data) return alert("No hay nada que exportar.");
+    
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Copia_Seguridad_Miguel_${new Date().toLocaleDateString()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    alert("Copia descargada. Guárdala bien.");
+}
+
+function importFromFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const content = e.target.result;
+            JSON.parse(content); // Validar JSON
+            localStorage.setItem('miguel_vault', content);
+            alert("¡Datos importados con éxito!");
+            loadFromLocal();
+        } catch (err) {
+            alert("El archivo no es válido.");
+        }
+    };
+    reader.readAsText(file);
 }
 
 // Inicializar

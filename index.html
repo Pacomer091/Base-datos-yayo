@@ -45,12 +45,17 @@
         <div id="screen-list" class="screen" style="display: none;">
             <header class="header" style="margin-bottom: 1rem;">
                 <h1>Tus Contraseñas</h1>
-                <button class="btn btn-primary" onclick="showAddForm()">+ Añadir Nueva</button>
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                    <button class="btn btn-primary" onclick="showAddForm()" style="flex: 2;">+ Añadir</button>
+                    <button class="btn btn-outline" onclick="exportToFile()" style="flex: 1; padding: 0;">📤</button>
+                    <button class="btn btn-outline" onclick="document.getElementById('file-import').click()" style="flex: 1; padding: 0;">📥</button>
+                </div>
+                <input type="file" id="file-import" style="display: none;" onchange="importFromFile(event)">
             </header>
 
             <div id="password-list">
                 <!-- Se llenará con JS -->
-                <p style="text-align: center;">Buscando...</p>
+                <p style="text-align: center;">Cargando...</p>
             </div>
         </div>
 
