@@ -84,13 +84,20 @@ function decrypt(cipher) {
 async function fetchPasswords() {
     listContainer.innerHTML = '<p style="text-align: center; margin-top: 2rem;">Buscando tus claves...</p>';
     try {
-        console.log("Intentando conectar a:", SCRIPT_URL);
-        const response = await fetch(SCRIPT_URL + "?action=get");
+        console.log("Conectando con Google Sheets...");
+        // Usamos cache: 'no-store' y explicitamente manejamos la respuesta como texto para evitar fallos de CORS con JSON pre-visto
+        const response = await fetch(SCRIPT_URL + "?action=get", {
+            method: 'GET',
+            cache: 'no-store',
+            redirect: 'follow'
+        });
         
-        if (!response.ok) throw new Error("Respuesta del servidor no válida");
+        if (!response.ok) throw new Error("Google no responde bien. Status: " + response.status);
         
-        const data = await response.json();
-        console.log("Datos recibidos:", data);
+        const rawText = await response.text();
+        console.log("Respuesta recibida:", rawText);
+        
+        const data = JSON.parse(rawText);
         
         passwords = data.map(item => ({
             site: item.site,
@@ -100,10 +107,11 @@ async function fetchPasswords() {
         
         renderPasswords();
     } catch (e) {
-        console.error("Error en fetchPasswords:", e);
-        listContainer.innerHTML = `<p style="text-align: center; color: #f87171;">
-            Error al conectar.<br>
-            <span style="font-size: 0.9rem; opacity: 0.7;">${e.message}</span>
+        console.error("Error detallado:", e);
+        listContainer.innerHTML = `<p style="text-align: center; color: #f87171; padding: 1rem; background: rgba(0,0,0,0.2); border-radius: 1rem;">
+            No se pudo conectar con la base de datos.<br><br>
+            <span style="font-size: 0.9rem; opacity: 0.8;">Motivo: ${e.message}</span><br>
+            <span style="font-size: 0.8rem; opacity: 0.5;">Asegúrate de haber publicado el script como "Cualquiera" y "Nueva versión".</span>
         </p>`;
     }
 }
