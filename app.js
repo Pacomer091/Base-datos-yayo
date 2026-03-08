@@ -1,6 +1,6 @@
 // --- Configuración y Estado ---
 let userPin = "";
-const CORRECT_PIN = "1234"; // ESTO DEBERÍA SER MÁS SEGURO LUEGO
+const CORRECT_PIN = "5456"; // Actualizado según pedido
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQSuiQXnxVXLyNSAOLc6Bf9-BDrswU9TSFX3aEcOF78WwEtQhkecskYlgZAFefcCN3/exec'; 
 
 let passwords = [];
@@ -43,7 +43,7 @@ async function validatePin() {
     if (userPin === CORRECT_PIN) {
         showList();
     } else {
-        alert("Ese código no es correcto, Yayo. Prueba otra vez.");
+        alert("Ese código no es correcto, Miguel. Prueba otra vez.");
         clearPin();
     }
 }
@@ -142,7 +142,7 @@ async function savePassword() {
             body: JSON.stringify({ action: 'add', site, user, pass: encryptedPass })
         });
         
-        alert("¡Guardado correctamente, Yayo!");
+        alert("¡Guardado correctamente, Miguel!");
         showList();
     } catch (e) {
         alert("No se pudo guardar. Revisa la conexión.");
