@@ -1,0 +1,145 @@
+:root {
+    --primary: #2563eb; /* Blue for visibility */
+    --primary-dark: #1e40af;
+    --accent: #f59e0b; /* Amber for highlight */
+    --bg-app: #f8fafc;
+    --card-bg: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --error: #dc2626;
+    --success: #16a34a;
+
+    /* Grandpa sizes */
+    --font-huge: 2.2rem;
+    --font-large: 1.5rem;
+    --font-base: 1.25rem;
+    --spacing-huge: 2rem;
+    --radius-lg: 1rem;
+    --touch-target: 70px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text-main);
+    background-color: var(--bg-app);
+    font-size: var(--font-base);
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#app {
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+    padding: var(--spacing-huge);
+    flex: 1;
+}
+
+/* Accessible HUGE buttons */
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--touch-target);
+    padding: 0 1.5rem;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: var(--font-large);
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.1s ease, background-color 0.2s;
+    width: 100%;
+    text-decoration: none;
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 3px solid var(--primary);
+    color: var(--primary);
+}
+
+/* Card Styling for Passwords */
+.card {
+    background: var(--card-bg);
+    border: 2px solid #e2e8f0;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.card-title {
+    font-size: var(--font-huge);
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+}
+
+.input-label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: var(--font-large);
+}
+
+input {
+    width: 100%;
+    min-height: 60px;
+    padding: 0 1rem;
+    font-size: var(--font-large);
+    border: 3px solid #cbd5e1;
+    border-radius: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+/* PIN Screen Specific */
+.pin-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.pin-dot {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 3px solid var(--primary);
+    margin: 0 0.5rem;
+}
+
+.pin-dot.filled {
+    background-color: var(--primary);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.header h1 {
+    font-size: var(--font-huge);
+}

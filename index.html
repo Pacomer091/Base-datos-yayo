@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2563eb">
+    <title>Mis Contraseñas (Yayo)</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Pantalla de Bienvenida / PIN -->
+        <div id="screen-pin" class="screen">
+            <header class="header">
+                <h1>Mis Contraseñas</h1>
+                <p>Hola Yayo, pon tu código para entrar</p>
+            </header>
+            
+            <div id="pin-display" style="display: flex; justify-content: center; margin-bottom: 2rem;">
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+                <div class="pin-dot"></div>
+            </div>
+
+            <div class="pin-grid">
+                <button class="btn btn-outline" onclick="addPin(1)">1</button>
+                <button class="btn btn-outline" onclick="addPin(2)">2</button>
+                <button class="btn btn-outline" onclick="addPin(3)">3</button>
+                <button class="btn btn-outline" onclick="addPin(4)">4</button>
+                <button class="btn btn-outline" onclick="addPin(5)">5</button>
+                <button class="btn btn-outline" onclick="addPin(6)">6</button>
+                <button class="btn btn-outline" onclick="addPin(7)">7</button>
+                <button class="btn btn-outline" onclick="addPin(8)">8</button>
+                <button class="btn btn-outline" onclick="addPin(9)">9</button>
+                <div></div>
+                <button class="btn btn-outline" onclick="addPin(0)">0</button>
+                <button class="btn btn-outline" onclick="clearPin()" style="border-color: var(--error); color: var(--error);">Borrar</button>
+            </div>
+        </div>
+
+        <!-- Pantalla de Lista (Oculta al inicio) -->
+        <div id="screen-list" class="screen" style="display: none;">
+            <header class="header" style="margin-bottom: 1rem;">
+                <h1>Tus Contraseñas</h1>
+                <button class="btn btn-primary" onclick="showAddForm()">+ Añadir Nueva</button>
+            </header>
+
+            <div id="password-list">
+                <!-- Se llenará con JS -->
+                <p style="text-align: center;">Buscando...</p>
+            </div>
+        </div>
+
+        <!-- Formulario (Oculto al inicio) -->
+        <div id="screen-add" class="screen" style="display: none;">
+            <header class="header">
+                <h1>Nueva Contraseña</h1>
+            </header>
+
+            <label class="input-label">¿De qué es? (Ej: Netflix)</label>
+            <input type="text" id="in-site" placeholder="Nombre de la web">
+
+            <label class="input-label">Usuario / Correo</label>
+            <input type="text" id="in-user" placeholder="Tu correo o nombre">
+
+            <label class="input-label">La clave</label>
+            <input type="text" id="in-pass" placeholder="Escribe la clave aquí">
+
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-outline" onclick="showList()" style="flex: 1;">Cancelar</button>
+                <button class="btn btn-primary" onclick="savePassword()" style="flex: 2;">GUARDAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SDK de Supabase (se cargará después) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+# Archivos que no se suben al servidor web
+google_script.js
+.gemini/
+brain/
+node_modules/
+*.png
+!icon-*.png
