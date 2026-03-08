@@ -99,9 +99,17 @@ async function fetchPasswords() {
         
         const data = JSON.parse(rawText);
         
+        if (data.error) {
+            throw new Error("Google dice: " + data.error);
+        }
+
+        if (!Array.isArray(data)) {
+            throw new Error("Recibido formato incorrecto de Google");
+        }
+        
         passwords = data.map(item => ({
-            site: item.site,
-            user: item.user,
+            site: item.site || "Sin nombre",
+            user: item.user || "Sin usuario",
             pass: decrypt(item.pass)
         }));
         
