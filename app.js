@@ -84,10 +84,14 @@ function decrypt(cipher) {
 async function fetchPasswords() {
     listContainer.innerHTML = '<p style="text-align: center; margin-top: 2rem;">Buscando tus claves...</p>';
     try {
+        console.log("Intentando conectar a:", SCRIPT_URL);
         const response = await fetch(SCRIPT_URL + "?action=get");
-        const data = await response.json();
         
-        // Desencriptar cada contraseña antes de mostrarla
+        if (!response.ok) throw new Error("Respuesta del servidor no válida");
+        
+        const data = await response.json();
+        console.log("Datos recibidos:", data);
+        
         passwords = data.map(item => ({
             site: item.site,
             user: item.user,
@@ -96,8 +100,11 @@ async function fetchPasswords() {
         
         renderPasswords();
     } catch (e) {
-        console.error(e);
-        listContainer.innerHTML = '<p style="text-align: center; color: red;">Error al conectar. Revisa la URL del script.</p>';
+        console.error("Error en fetchPasswords:", e);
+        listContainer.innerHTML = `<p style="text-align: center; color: #f87171;">
+            Error al conectar.<br>
+            <span style="font-size: 0.9rem; opacity: 0.7;">${e.message}</span>
+        </p>`;
     }
 }
 
