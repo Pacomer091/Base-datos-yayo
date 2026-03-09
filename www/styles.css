@@ -146,7 +146,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.8rem; /* Slightly reduced as requested */
+    font-size: 1.2rem; /* Final size as requested */
 }
 
 .card-title {
