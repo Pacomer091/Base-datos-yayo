@@ -37,7 +37,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
-    padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0;
+    padding: env(safe-area-inset-top) 0 calc(env(safe-area-inset-bottom) + 100px) 0;
 }
 
 /* Background Animated Gradient */
@@ -57,7 +57,7 @@ body {
     max-width: 500px;
     margin: 0 auto;
     width: 100%;
-    padding: var(--spacing-huge);
+    padding: 1.5rem; /* Reduced for mobile */
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -98,11 +98,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: var(--touch-target);
-    padding: 0 1.5rem;
+    min-height: 60px; /* More flexible than 75px */
+    padding: 0 1rem;
     border: none;
     border-radius: var(--radius-lg);
-    font-size: var(--font-large);
+    font-size: 1.3rem; /* Slightly smaller base */
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -192,8 +192,8 @@ input:focus {
 .pin-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1.2rem;
-    margin-top: 2rem;
+    gap: 0.8rem; /* Reduced gap */
+    margin-top: 1.5rem;
 }
 
 .pin-dot {
@@ -302,7 +302,8 @@ input:focus {
 
 /* Desktop adjustments */
 @media (min-width: 600px) {
-    #app { padding: 4rem; }
+    #app { padding: 4rem; margin-bottom: 0; }
+    body { padding-bottom: 0; }
     .bottom-nav { 
         width: 400px;
         left: 50%;
