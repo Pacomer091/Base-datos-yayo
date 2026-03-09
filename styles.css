@@ -146,7 +146,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem; /* Final size as requested */
+    font-size: 2rem; /* Set to 2 as requested */
 }
 
 .card-title {
@@ -201,8 +201,9 @@ input:focus {
 .pin-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 0.4rem; /* Halved */
-    margin-top: 0.8rem;
+    gap: 0.6rem; 
+    margin: 1.5rem auto 0;
+    max-width: 260px; /* Constrain grid to shrink the "casillitas" */
 }
 
 .pin-dot {
