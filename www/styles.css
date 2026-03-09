@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&display=swap');
+
+:root {
+    --primary: #6366f1; /* Indigo vibrant */
+    --primary-light: #818cf8;
+    --accent: #f59e0b; 
+    --bg-app: #0f172a; /* Sleek dark mode background */
+    --card-bg: rgba(255, 255, 255, 0.08); /* Glassmorphism */
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --error: #ef4444;
+    --success: #10b981;
+
+    /* Grandpa sizes */
+    --font-huge: 2.22rem;
+    --font-large: 1.55rem;
+    --font-base: 1.25rem;
+    --spacing-huge: 2.5rem;
+    --radius-lg: 1.5rem;
+    --touch-target: 75px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    color: var(--text-main);
+    background-color: var(--bg-app);
+    font-size: var(--font-base);
+    line-height: 1.4;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+/* Background Animated Gradient */
+.bg-gradient {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: radial-gradient(circle at 0% 0%, #4338ca 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, #1e1b4b 0%, transparent 40%),
+                #0f172a;
+}
+
+#app {
+    max-width: 500px;
+    margin: 0 auto;
+    width: 100%;
+    padding: var(--spacing-huge);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.screen {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Header Aesthetics */
+.header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.header h1 {
+    font-size: var(--font-huge);
+    font-weight: 800;
+    background: linear-gradient(to right, #818cf8, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.75rem;
+}
+
+.header p {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+/* Accessible HUGE buttons - Glassmorphism style */
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--touch-target);
+    padding: 0 1.5rem;
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: var(--font-large);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+    text-decoration: none;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.btn:active {
+    transform: scale(0.96);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-outline {
+    background-color: var(--card-bg);
+    border: 2px solid rgba(99, 102, 241, 0.5);
+    color: #e0e7ff;
+    backdrop-filter: blur(10px);
+}
+
+/* Card Styling - Premium Glass */
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-bottom: 1.8rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: #a5b4fc;
+}
+
+.card p {
+    margin-bottom: 0.5rem;
+    word-break: break-all;
+}
+
+.card strong {
+    color: #94a3b8;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    display: block;
+}
+
+/* Input Styling */
+.input-label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    font-size: 1.3rem;
+    color: #e2e8f0;
+}
+
+input {
+    width: 100%;
+    min-height: 65px;
+    padding: 0 1.5rem;
+    font-size: 1.4rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    color: white;
+    margin-bottom: 2rem;
+    transition: border-color 0.2s;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: rgba(15, 23, 42, 0.8);
+}
+
+/* PIN Screen Specific */
+.pin-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+    margin-top: 2rem;
+}
+
+.pin-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 3px solid rgba(99, 102, 241, 0.4);
+    margin: 0 0.6rem;
+    transition: all 0.2s;
+}
+
+.pin-dot.filled {
+    background-color: #818cf8;
+    border-color: #818cf8;
+    box-shadow: 0 0 15px #6366f1;
+    transform: scale(1.1);
+}
+
+/* Custom Scrollbar for list */
+#password-list::-webkit-scrollbar {
+    width: 8px;
+}
+#password-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
