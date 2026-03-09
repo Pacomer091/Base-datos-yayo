@@ -2,8 +2,23 @@
 let userPin = "";
 const CORRECT_PIN = "5456";
 let passwords = [];
+let isNative = false;
 
-// --- Elementos de la Interfaz ---
+// --- Detección de Plataforma (Capacitor) ---
+document.addEventListener('DOMContentLoaded', () => {
+    // Si estamos en un móvil como APK, Capacitor estará definido
+    if (window.hasOwnProperty('Capacitor')) {
+        isNative = true;
+        document.body.classList.add('is-native');
+        document.getElementById('download-section').style.display = 'none';
+        console.log("Modo APK activado: Interfaz móvil premium.");
+    } else {
+        console.log("Modo Web activado: Landing page.");
+    }
+    clearPin();
+});
+
+// --- Lógica del PIN ---
 const screenPin = document.getElementById('screen-pin');
 const screenList = document.getElementById('screen-list');
 const screenAdd = document.getElementById('screen-add');
@@ -49,18 +64,33 @@ async function validatePin() {
 function showList() {
     hideAllScreens();
     screenList.style.display = 'block';
+    if (isNative) {
+        document.getElementById('bottom-nav').style.display = 'flex';
+        updateNav('list');
+    }
     loadFromLocal();
 }
 
 function showAddForm() {
     hideAllScreens();
     screenAdd.style.display = 'block';
+    if (isNative) {
+        document.getElementById('bottom-nav').style.display = 'flex';
+        updateNav('add');
+    }
 }
 
 function hideAllScreens() {
     screenPin.style.display = 'none';
     screenList.style.display = 'none';
     screenAdd.style.display = 'none';
+}
+
+function updateNav(page) {
+    const items = document.querySelectorAll('.nav-item');
+    items.forEach(i => i.classList.remove('active'));
+    if (page === 'list') items[0].classList.add('active');
+    if (page === 'add') items[1].classList.add('active');
 }
 
 // --- Lógica de Seguridad (Encriptación) ---
