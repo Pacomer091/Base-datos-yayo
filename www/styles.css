@@ -135,8 +135,8 @@ body {
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-lg);
-    padding: 0.6rem; /* Shrunk */
-    margin-bottom: 0.6rem; /* Shrunk */
+    padding: 1.5rem 0.6rem; /* Stretched vertically */
+    margin-bottom: 0.8rem;
     box-shadow: 0 5px 10px -3px rgba(0, 0, 0, 0.2);
 }
 
