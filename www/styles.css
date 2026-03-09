@@ -74,7 +74,7 @@ body {
 
 /* Header Aesthetics */
 .header {
-    text-align: center;
+    text-align: left; /* Changed from centered */
     margin-bottom: 0.5rem;
 }
 
@@ -202,8 +202,8 @@ input:focus {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0.6rem; 
-    margin: 1.5rem auto 0;
-    max-width: 195px; /* Shrunk to 75% (260 * 0.75) */
+    margin: 1.5rem 0 0; /* Left alignment */
+    max-width: 195px; /* Shrunk to 75% */
 }
 
 .pin-dot {
@@ -229,7 +229,7 @@ input:focus {
 
 .is-native .header h1 {
     font-size: 1.4rem; /* Halved */
-    text-align: center;
+    text-align: left; /* Alignment synced */
     background: linear-gradient(to bottom, #fff, #94a3b8);
     -webkit-background-clip: text;
 }
