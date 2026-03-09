@@ -134,10 +134,16 @@ body {
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 0.2rem; /* Almost square corners */
-    padding: 2.5rem 0.6rem; /* Stretched more to approach square feel */
-    margin-bottom: 1rem;
-    box-shadow: 0 5px 10px -3px rgba(0, 0, 0, 0.2);
+    border-radius: 0; /* Perfectly square corners */
+    aspect-ratio: 1 / 1; /* Perfect square shape */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 1rem; 
+    margin-bottom: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .card-title {
